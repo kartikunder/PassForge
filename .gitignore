@@ -1,0 +1,21 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore all log files
+*.log
+
+# Ignore compiled Python files
+__pycache__/
+*.py[cod]
+
+# Ignore environment variables file
+.env
+
+# Ignore all files with .bak extension
+*.bak
+
+# Ignore specific project configuration files
+package-lock.json
+postcss.config.js
+tailwind.config.js
+package.json
