@@ -5,77 +5,230 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Generator</title>
-    
-    <link rel="stylesheet" href="main.css">
+    <link href="./main.css" rel="stylesheet">
+    <style>
+        /* Additional custom styles */
+        .tooltip {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .copyBtn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .generateButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(72, 187, 120, 0.4), 0 4px 6px -2px rgba(72, 187, 120, 0.2);
+        }
+
+        .copyBtn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* White background and padding for smartphones */
+        body {
+            background-color: #ffffff;
+            padding: 0 1rem; /* Adjust the padding as needed */
+        }
+
+
+        /* Dark card design */
+        .container {
+            background: linear-gradient(135deg, #3a506b 0%, #1c2541 100%);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow effect */
+        }
+
+        /* Custom slider styles */
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, #48bb78 0%, #38a169 100%);
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            border-radius: 9999px; /* round shape */
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #38a169;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #38a169;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Custom checkbox styles */
+        .check input[type="checkbox"] {
+            display: none;
+        }
+
+        .check label {
+            position: relative;
+            padding-left: 1.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #ffffff;
+        }
+
+        .check label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #38a169;
+            background-color: transparent;
+            border-radius: 4px;
+        }
+
+        .check input[type="checkbox"]:checked + label:before {
+            background-color: #38a169;
+        }
+
+        /* Focus state */
+        .check input[type="checkbox"]:focus + label:before {
+            box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.5);
+        }
+
+        /* Hover state */
+        .check input[type="checkbox"]:hover + label:before {
+            background-color: rgba(56, 161, 105, 0.2);
+        }
+
+        /* Widened text box */
+        .display {
+            width: 100%;
+        }
+
+        /* Credit footer */
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #555;
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer a {
+            color: #555;
+            text-decoration: underline;
+        }
+
+        /* Margins for smartphones */
+        @media (max-width: 640px) {
+            .container {
+                margin: 0 10px; /* Adjust margin as needed */
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="wrapper">
+<body class="flex items-center justify-center min-h-screen">
 
-        <div class="container bg-gradient-to-br from-[#7DAFC2] to-[#2F4F4F] content-center bg-opacity-20 mx-8 border">
+    <div class="container p-8 rounded-lg shadow-lg w-full max-w-3xl">
 
-            <h1 class="font-extrabold text-5xl text-center py-6 " >Password Generator</h1>
+        <h1 class="text-white font-extrabold text-5xl text-center py-6">Password Generator</h1>
+
+        <div class="text-center items-center grid grid-cols-1 md:grid-cols-2 gap-8 place-content-center mx-4 md:mx-10">
+            <div class="display-container relative">
+
+                <input readonly placeholder="Password" class="display text-xl placeholder-yellow-500 border rounded-3xl pl-4 placeholder-opacity-60 backdrop-blur-sm bg-white/20 drop-shadow-2xl font-bold font-mono opacity-75 w-full py-2" data-passwordDisplay>
     
-            <div class="text-center items-center grid grid-cols-2 gap-4 place-content-center mx-20">
-                <div class="display-container ">
+                <button class="copyBtn bg-white p-2 rounded-full shadow-md flex items-center justify-center absolute right-0 top-1/2 transform -translate-y-1/2 mr-2" data-copy>
+                    <span class="tooltip font-semibold" data-copyMsg>Copy!</span>
+                    <img src="./assets/copy.svg" alt="copy" width="23" height="23">
+                </button>
     
-                    <input readonly placeholder="Password" class="display text-3xl placeholder-yellow-500 bg-transparent border rounded-3xl pl-4  placeholder-opacity-60 backdrop-blur-sm bg-white/20 drop-shadow-2xl drop" data-passwordDisplay>
-        
-                    <button class="copyBtn" data-copy>
-                        <span class="tooltip font-semibold" data-copyMsg></span>
-                        <img src="./assets/copy.svg" alt="copy" width="23" height="23">
-                    </button>
-        
-                </div>
-        
-        
-                <div class="input-container font-semibold">
-        
-                    <!--password length section-->
-                    <div class="length-container grid grid-cols-2">
-                        <p >Password Length</p>
-                        <p data-lengthNumber>0</p>
-                    </div>
-                    
-                    <!--slider-->
-                    <input type="range" min="1" max="20" class="slider" step="1" data-lengthSlider>
-        
-                    <!-- checkboxes-->
-                    <div class="check">
-                        <input type="checkbox" id="uppercase">
-                        <label for="uppercase">Includes Uppercase letters</label>
-                    </div>
-        
-                    <div class="check">
-                        <input type="checkbox" id="lowercase">
-                        <label for="lowercase">Includes Lowercase letters</label>
-                    </div>
-        
-                    <div class="check">
-                        <input type="checkbox" id="numbers">
-                        <label for="numbers">Includes Numbers </label>
-                    </div>
-        
-                    <div class="check">
-                        <input type="checkbox" id="symbols">
-                        <label for="symbols">Includes Symbols </label>
-                    </div>
-        
-                    <!-- strength section-->
-                    <div class="strength-container">
-                        <p>Password Strength</p>
-                        <div class="indicator" data-indicator></div>
-                    </div>
-        
-                    <!-- generate password-->
-                    <button class="generateButton  border-4 p-2 rounded-full">Generate Password</button>
-        
-                </div>
             </div>
-            
     
+            <div class="input-container text-white font-semibold">
+
+                <!-- password length section -->
+                <div class="length-container grid grid-cols-2 mt-4">
+                    <p>Password Length</p>
+                    <p data-lengthNumber>0</p>
+                </div>
+                
+                <!-- slider -->
+                <input type="range" min="1" max="20" class="slider mt-2 w-full" step="1" data-lengthSlider>
+    
+                <div class="grid justify-items-start  mt-4">
+                    <!-- checkboxes -->
+                    <div class="check mt-2">
+                        <input type="checkbox" id="uppercase" class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="uppercase" class="ml-2">Includes Uppercase letters</label>
+                    </div>
+        
+                    <div class="check mt-4">
+                        <input type="checkbox" id="lowercase" class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="lowercase" class="ml-2">Includes Lowercase letters</label>
+                    </div>
+        
+                    <div class="check mt-4">
+                        <input type="checkbox" id="numbers" class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="numbers" class="ml-2">Includes Numbers</label>
+                    </div>
+        
+                    <div class="check mt-4">
+                        <input type="checkbox" id="symbols" class="w-4 h-4 text-amber-600 bg-gray-100 border-gray-300 rounded focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="symbols" class="ml-2">Includes Symbols</label>
+                    </div>
+                </div>
+                
+                <!-- strength section -->
+                <div class="strength-container flex items-center mt-4">
+                    <p class="mr-4">Password Strength</p>
+                    <div class="indicator h-8 w-8 rounded-full bg-gray-300" data-indicator></div>
+                </div>
+    
+                <!-- generate password -->
+                <button class="generateButton bg-green-500 text-white hover:bg-green-600 font-bold py-2 px-4 rounded-full mt-6 transition duration-300 ease-in-out">Generate Password</button>
+    
+            </div>
         </div>
     </div>
-    
+
+    <!-- Credit footer -->
+    <div class="footer">
+        Created and maintained by <a href="https://github.com/kartikunder" target="_blank" class="underline">Kartik Kunder</a>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
